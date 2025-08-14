@@ -1,582 +1,566 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MNS Group - Portale Formativo</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .header h1 {
-            color: #4a5568;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .header .subtitle {
-            color: #718096;
-            font-size: 1.2em;
-        }
-
-        .login-section, .dashboard {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .login-form {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #4a5568;
-        }
-
-        .form-group select, .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group select:focus, .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-            width: 100%;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .progress-overview {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .user-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #667eea;
-        }
-
-        .user-card h3 {
-            color: #4a5568;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-
-        .progress-bar {
-            background: #e2e8f0;
-            border-radius: 10px;
-            height: 20px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #48bb78, #38a169);
-            border-radius: 10px;
-            transition: width 0.3s ease;
-        }
-
-        .modules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .module-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease;
-            cursor: pointer;
-        }
-
-        .module-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .module-card.completed {
-            border-left: 4px solid #48bb78;
-        }
-
-        .module-card.in-progress {
-            border-left: 4px solid #ed8936;
-        }
-
-        .module-card.not-started {
-            border-left: 4px solid #e2e8f0;
-        }
-
-        .module-title {
-            font-size: 1.2em;
-            font-weight: 600;
-            color: #4a5568;
-            margin-bottom: 10px;
-        }
-
-        .module-description {
-            color: #718096;
-            margin-bottom: 15px;
-            font-size: 0.9em;
-        }
-
-        .module-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            font-weight: 600;
-        }
-
-        .status-completed {
-            background: #c6f6d5;
-            color: #22543d;
-        }
-
-        .status-progress {
-            background: #feebc8;
-            color: #c05621;
-        }
-
-        .status-not-started {
-            background: #f7fafc;
-            color: #4a5568;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .user-info {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .progress-overview {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MNS Group • Portale Formativo</title>
+  <style>
+    :root{
+      --bg: #0f1221;
+      --panel:#151936;
+      --panel-2:#1b2152;
+      --muted:#8f98c2;
+      --txt:#e9ecff;
+      --brand:#6aa9ff;
+      --brand-2:#9c6bff;
+      --ok:#3ad29f;
+      --warn:#ffb14a;
+      --danger:#ff6b6b;
+      --radius:14px;
+      --radius-sm:10px;
+      --shadow:0 8px 30px rgba(0,0,0,.25);
+      --shadow-sm:0 4px 16px rgba(0,0,0,.18);
+      --ring: 0 0 0 3px rgba(106,169,255,.25);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 700px at 80% -10%, #2a2f68 0%, transparent 60%),
+                  radial-gradient(1000px 700px at -20% 20%, #22307a 0%, transparent 55%),
+                  var(--bg);
+      color:var(--txt);
+      font: 15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue",Arial;
+    }
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .app{display:grid;grid-template-columns:260px 1fr;min-height:100dvh}
+    .sidebar{
+      position:sticky; top:0; height:100dvh; padding:22px 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0) 20%), var(--panel);
+      border-right:1px solid rgba(255,255,255,.06);
+    }
+    .logo{display:flex; gap:10px; align-items:center; font-weight:700; letter-spacing:.4px; margin-bottom:18px}
+    .logo-badge{
+      width:34px;height:34px;border-radius:10px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      display:grid;place-items:center; box-shadow:var(--shadow-sm);
+      font-weight:800; color:white;
+    }
+    .sidebar .section-title{margin:22px 8px 10px; color:var(--muted); text-transform:uppercase; font-size:12px; letter-spacing:.8px}
+    .nav{display:flex; flex-direction:column; gap:8px; margin-top:8px}
+    .nav button{
+      all:unset; display:flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:var(--radius-sm); color:var(--txt); cursor:pointer;
+    }
+    .nav button:hover{ background:rgba(255,255,255,.05) }
+    .nav button.active{ background:linear-gradient(90deg, rgba(106,169,255,.12), rgba(156,107,255,.12)); outline: var(--ring); }
+    .tag{ margin-left:auto; font-size:12px; color:var(--muted); background:rgba(255,255,255,.06); padding:2px 8px; border-radius:20px }
+    .main{ padding:22px 28px 40px }
+    .topbar{ display:flex; align-items:center; gap:16px; justify-content:space-between; margin-bottom:16px }
+    .search{ display:flex; align-items:center; gap:10px; background:var(--panel); padding:10px 12px; border-radius:12px; width:440px; max-width:60%; border:1px solid rgba(255,255,255,.06) }
+    .search input{ all:unset; flex:1; color:var(--txt) }
+    .user{ display:flex; align-items:center; gap:12px; background:var(--panel); padding:8px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.06) }
+    .avatar{ width:30px; height:30px; border-radius:50%; background: linear-gradient(135deg, var(--brand), var(--brand-2)); display:grid; place-items:center; font-weight:800 }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow: var(--shadow);
+    }
+    .hero{ display:grid; grid-template-columns:1.1fr .9fr; gap:18px; margin:8px 0 22px }
+    .kpi{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; margin-top:8px }
+    .kpi .item{background:var(--panel-2); border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,.06)}
+    .kpi .value{font-size:22px; font-weight:800}
+    .kpi .label{color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.6px}
+    .progressbar{ height:10px; background:rgba(255,255,255,.08); border-radius:20px; overflow:hidden; margin-top:8px }
+    .progressbar > i{ display:block; height:100%; width:0%; background: linear-gradient(90deg, var(--brand), var(--ok)) }
+    .grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap:16px }
+    .module{ grid-column: span 6; background: var(--panel); border-radius: var(--radius); border:1px solid rgba(255,255,255,.08); padding:16px; display:flex; flex-direction:column; gap:10px }
+    .module header{ display:flex; align-items:center; gap:10px }
+    .pill{font-size:12px; padding:4px 10px; border-radius:999px; background:rgba(255,255,255,.08); color:var(--muted)}
+    .actions{ display:flex; gap:10px; margin-top:auto}
+    .btn{ all:unset; cursor:pointer; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); transition:.2s }
+    .btn:hover{ filter:brightness(1.1) }
+    .btn.primary{ background: linear-gradient(90deg, var(--brand), var(--brand-2)); border-color: transparent; font-weight:700 }
+    .btn.ghost{ background: transparent }
+    .team{ display:grid; grid-template-columns: repeat(5, 1fr); gap:12px }
+    .member{ background: var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:12px }
+    .member .name{ font-weight:700 }
+    .foot{ margin-top:24px; color:var(--muted); font-size:12px; display:flex; justify-content:space-between; align-items:center }
+    .switch{ display:flex; align-items:center; gap:8px }
+    .switch input{ width:40px; height:24px; appearance:none; background:rgba(255,255,255,.15); border-radius:30px; outline:none; cursor:pointer }
+    .switch input:checked{ background:linear-gradient(90deg, var(--brand), var(--brand-2)) }
+    .switch input::after{ content:""; position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:white; transition:.2s }
+    .switch input:checked::after{ transform: translateX(16px) }
+    .hidden{ display:none !important }
+    /* Mobile */
+    @media (max-width:1060px){
+      .app{ grid-template-columns: 1fr }
+      .sidebar{ position:relative; height:auto; border-right:none; border-bottom:1px solid rgba(255,255,255,.06) }
+      .hero{ grid-template-columns:1fr }
+      .grid .module{ grid-column: span 12 }
+      .team{ grid-template-columns: repeat(2, 1fr) }
+      .search{ max-width:100%; width:100%}
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🏢 MNS Group</h1>
-            <p class="subtitle">Portale Formativo Aziendale</p>
+  <div class="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-badge">M</div>
+        <div>
+          <div style="font-weight:800">MNS Group</div>
+          <div style="color:var(--muted); font-size:12px">Portale Formativo</div>
         </div>
+      </div>
 
-        <!-- Sezione Login -->
-        <div id="loginSection" class="login-section">
-            <h2 style="text-align: center; margin-bottom: 30px; color: #4a5568;">Accesso Soci</h2>
-            <form class="login-form" onsubmit="login(event)">
-                <div class="form-group">
-                    <label for="userSelect">Seleziona il tuo nome:</label>
-                    <select id="userSelect" required>
-                        <option value="">-- Scegli il socio --</option>
-                        <option value="gianluca">Gianluca</option>
-                        <option value="simone">Simone</option>
-                        <option value="andrea">Andrea</option>
-                        <option value="nicola">Nicola</option>
-                        <option value="gabriele">Gabriele</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" placeholder="Inserisci la password" required>
-                </div>
-                <button type="submit" class="btn">Accedi al Portale</button>
-            </form>
+      <div class="section-title">Navigazione</div>
+      <div class="nav" id="nav">
+        <button class="active" data-view="dashboard">📊 Dashboard</button>
+        <button data-view="modules">📚 Moduli</button>
+        <button data-view="team">👥 Team</button>
+        <button data-view="account">⚙️ Account</button>
+      </div>
+
+      <div class="section-title">Filtri</div>
+      <div class="nav">
+        <button data-filter="all">Tutti <span class="tag" id="count-all">0</span></button>
+        <button data-filter="pending">Da fare <span class="tag" id="count-pending">0</span></button>
+        <button data-filter="done">Completati <span class="tag" id="count-done">0</span></button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <!-- TOPBAR -->
+      <div class="topbar">
+        <div class="search">
+          🔎 <input id="search" placeholder="Cerca nei moduli… (titolo, tag)">
         </div>
-
-        <!-- Dashboard -->
-        <div id="dashboard" class="dashboard hidden">
-            <button class="logout-btn" onclick="logout()">Esci</button>
-            
-            <div class="user-info">
-                <h2>Benvenuto/a, <span id="userName"></span>! 👋</h2>
-                <p>Il tuo progresso formativo</p>
-            </div>
-
-            <!-- Panoramica Progressi Tutti i Soci -->
-            <div id="adminView" class="hidden">
-                <h3 style="margin-bottom: 20px; color: #4a5568;">📊 Progressi di Tutti i Soci</h3>
-                <div class="progress-overview" id="allUsersProgress">
-                    <!-- Sarà popolato dinamicamente -->
-                </div>
-            </div>
-
-            <!-- Moduli Formativi -->
-            <h3 style="margin-bottom: 20px; color: #4a5568;">📚 Moduli Formativi</h3>
-            <div class="modules-grid" id="modulesGrid">
-                <!-- Sarà popolato dinamicamente -->
-            </div>
+        <div class="user" id="userBox">
+          <div class="avatar" id="avatar">O</div>
+          <div>
+            <div id="userName" style="font-weight:700">Ospite</div>
+            <div id="userEmail" style="color:var(--muted); font-size:12px">non autenticato</div>
+          </div>
+          <button class="btn ghost" id="loginBtn">Accedi</button>
+          <button class="btn" id="logoutBtn" style="display:none">Esci</button>
         </div>
+      </div>
+
+      <!-- HERO / KPI + PREFERENZE -->
+      <section class="hero">
+        <div class="card">
+          <h2 style="margin:0 0 8px">Benvenuto 👋</h2>
+          <div style="color:var(--muted); margin-bottom:8px">
+            Monitora i tuoi progressi sui 7 moduli e confrontati con il team.
+          </div>
+          <div class="kpi">
+            <div class="item">
+              <div class="value" id="kpi-progress">0%</div>
+              <div class="label">Avanzamento personale</div>
+              <div class="progressbar"><i id="pb-personal"></i></div>
+            </div>
+            <div class="item">
+              <div class="value" id="kpi-completed">0/7</div>
+              <div class="label">Moduli completati</div>
+              <div class="progressbar"><i id="pb-completed"></i></div>
+            </div>
+            <div class="item">
+              <div class="value" id="kpi-team">0%</div>
+              <div class="label">Media team</div>
+              <div class="progressbar"><i id="pb-team"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 6px">Preferenze</h3>
+          <label class="switch"><input id="switchBoard" type="checkbox" checked> <span>Mostra Board Team</span></label>
+          <label class="switch" style="margin-top:8px"><input id="switchCompact" type="checkbox"> <span>Vista compatta moduli</span></label>
+          <div style="margin-top:14px">
+            <button class="btn primary" id="seedBtn" title="Solo Admin">Setup moduli (Admin)</button>
+            <button class="btn" id="newModuleBtn" title="Solo Admin">Nuovo modulo</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULI -->
+      <section class="card">
+        <header style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px">
+          <h3 style="margin:0">🧩 I tuoi moduli</h3>
+          <div style="color:var(--muted); font-size:13px" id="moduleCount">0 moduli</div>
+        </header>
+        <div class="grid" id="modulesGrid"></div>
+      </section>
+
+      <!-- BOARD TEAM -->
+      <section class="card" id="teamBoard">
+        <header style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px">
+          <h3 style="margin:0">👥 Board Team</h3>
+          <div style="color:var(--muted); font-size:13px">Avanzamento dei soci</div>
+        </header>
+        <div class="team" id="teamGrid"></div>
+      </section>
+
+      <div class="foot">
+        <div>© <span id="year"></span> MNS Group — Internal Learning</div>
+        <div>Build: <code>v1.1 – UI Refresh</code></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL -->
+  <dialog id="modal" style="border:none; border-radius:16px; padding:0; max-width:520px; width:calc(100% - 24px); background:var(--panel); color:var(--txt)">
+    <div style="padding:18px; border-bottom:1px solid rgba(255,255,255,.08)">
+      <strong id="modalTitle">Azione</strong>
     </div>
+    <div style="padding:18px" id="modalBody">Contenuto…</div>
+    <div style="display:flex; gap:8px; justify-content:flex-end; padding:12px 18px; border-top:1px solid rgba(255,255,255,.06)">
+      <button class="btn ghost" onclick="modal.close()">Annulla</button>
+      <button class="btn primary" id="modalOk">Conferma</button>
+    </div>
+  </dialog>
 
-    <script>
-        // Dati simulati (in produzione questi verranno da Firestore)
-        const users = {
-            gianluca: { name: 'Gianluca', password: 'mns2024', isAdmin: true },
-            simone: { name: 'Simone', password: 'mns2024', isAdmin: false },
-            andrea: { name: 'Andrea', password: 'mns2024', isAdmin: false },
-            nicola: { name: 'Nicola', password: 'mns2024', isAdmin: false },
-            gabriele: { name: 'Gabriele', password: 'mns2024', isAdmin: false }
+  <script>
+    // ==========
+    // UTENTI (coerenti con la tua versione attuale)
+    // ==========
+    const users = {
+      gianluca: { name: 'Gianluca',  password: 'mns2024', isAdmin: true  },
+      simone:   { name: 'Simone',    password: 'mns2024', isAdmin: false },
+      andrea:   { name: 'Andrea',    password: 'mns2024', isAdmin: false },
+      nicola:   { name: 'Nicola',    password: 'mns2024', isAdmin: false },
+      gabriele: { name: 'Gabriele',  password: 'mns2024', isAdmin: false },
+    };
+    const ALLOWED = [
+      {name:"Gianluca", email:"gianluca@mns.local", admin:true,  id:"gianluca"},
+      {name:"Simone",   email:"simone@mns.local",   admin:false, id:"simone"},
+      {name:"Andrea",   email:"andrea@mns.local",   admin:false, id:"andrea"},
+      {name:"Nicola",   email:"nicola@mns.local",   admin:false, id:"nicola"},
+      {name:"Gabriele", email:"gabriele@mns.local", admin:false, id:"gabriele"},
+    ];
+
+    // ==========
+    // MODULI (coerenti con i tuoi PDF in /modules/Modulo {id}.pdf)
+    // ==========
+    const modules = [
+      { id: 1, title: 'Modulo 1: Introduzione Aziendale', description: 'Fondamenti e valori aziendali di MNS Group', size: '150 KB', tag:'overview', minutes:8 },
+      { id: 2, title: 'Modulo 2: Processi Operativi',     description: 'Procedure standard e best practices',      size: '180 KB', tag:'ops',      minutes:18 },
+      { id: 3, title: 'Modulo 3: Gestione Clienti',       description: 'Customer relationship management',         size: '200 KB', tag:'crm',      minutes:20 },
+      { id: 4, title: 'Modulo 4: Sicurezza e Compliance', description: 'Normative e protocolli di sicurezza',      size: '160 KB', tag:'legal',    minutes:15 },
+      { id: 5, title: 'Modulo 5: Innovazione e Sviluppo', description: 'Tecnologie emergenti e strategie',         size: '220 KB', tag:'innovation',minutes:22 },
+      { id: 6, title: 'Modulo 6: Leadership e Team',      description: 'Competenze manageriali e di gruppo',       size: '140 KB', tag:'people',   minutes:14 },
+      { id: 7, title: 'Modulo 7: Analisi e Reporting',    description: 'Strumenti di analisi e reportistica',      size: '190 KB', tag:'finance',  minutes:16 },
+    ];
+
+    // ==========
+    // STATE + STORAGE
+    // ==========
+    const STORAGE_KEY = 'mns-portal-state';
+    const $  = (q)=>document.querySelector(q);
+    const $$ = (q)=>Array.from(document.querySelectorAll(q));
+    const state = {
+      user: null,            // { id, name, isAdmin }
+      progress: {},          // { userId: [moduleIds...] }
+      filter: "all",
+      view: "dashboard",
+      modules
+    };
+
+    function loadState(){
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(raw){
+        try{
+          const data = JSON.parse(raw);
+          state.progress = data.progress || {};
+        }catch(e){}
+      }else{
+        // seed progress come nel tuo esempio originale
+        state.progress = {
+          gianluca: [1,2,3,4,5,6,7],
+          simone:   [1,2,3],
+          andrea:   [1,2,3,4,5],
+          nicola:   [1,2],
+          gabriele: [1,2,3,4]
         };
+        saveState();
+      }
+    }
+    function saveState(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ progress: state.progress }));
+    }
 
-        const modules = [
-            {
-                id: 1,
-                title: 'Modulo 1: Introduzione Aziendale',
-                description: 'Fondamenti e valori aziendali di MNS Group',
-                size: '150 KB'
-            },
-            {
-                id: 2,
-                title: 'Modulo 2: Processi Operativi',
-                description: 'Procedure standard e best practices',
-                size: '180 KB'
-            },
-            {
-                id: 3,
-                title: 'Modulo 3: Gestione Clienti',
-                description: 'Customer relationship management',
-                size: '200 KB'
-            },
-            {
-                id: 4,
-                title: 'Modulo 4: Sicurezza e Compliance',
-                description: 'Normative e protocolli di sicurezza',
-                size: '160 KB'
-            },
-            {
-                id: 5,
-                title: 'Modulo 5: Innovazione e Sviluppo',
-                description: 'Tecnologie emergenti e strategie',
-                size: '220 KB'
-            },
-            {
-                id: 6,
-                title: 'Modulo 6: Leadership e Team Building',
-                description: 'Competenze manageriali e di gruppo',
-                size: '140 KB'
-            },
-            {
-                id: 7,
-                title: 'Modulo 7: Analisi e Reporting',
-                description: 'Strumenti di analisi e reportistica',
-                size: '190 KB'
-            }
-        ];
+    // ==========
+    // RENDER BASE
+    // ==========
+    function renderBase(){
+      $("#year").textContent = new Date().getFullYear();
+      renderUserBox();
+      renderModules();
+      renderKPI();
+      renderTeam();
+      updateCounters();
+    }
 
-        // Progressi simulati (in produzione da Firestore)
-        let userProgress = {
-            gianluca: [1, 2, 3, 4, 5, 6, 7], // Tutti completati
-            simone: [1, 2, 3], // Primi 3 completati
-            andrea: [1, 2, 3, 4, 5], // Primi 5 completati
-            nicola: [1, 2], // Primi 2 completati
-            gabriele: [1, 2, 3, 4] // Primi 4 completati
+    function renderUserBox(){
+      const u = state.user;
+      $("#userName").textContent = u ? u.name : "Ospite";
+      $("#userEmail").textContent = u ? (ALLOWED.find(x=>x.id===u.id)?.email || '') : "non autenticato";
+      $("#avatar").textContent = (u ? u.name[0] : "O").toUpperCase();
+      $("#loginBtn").style.display  = u? "none":"inline-flex";
+      $("#logoutBtn").style.display = u? "inline-flex":"none";
+      // pulsanti admin
+      $("#seedBtn").style.display = u?.isAdmin ? "inline-flex":"none";
+      $("#newModuleBtn").style.display = u?.isAdmin ? "inline-flex":"none";
+    }
+
+    // ==========
+    // LOGIN MODALE (con select + password come il tuo)
+    // ==========
+    const modal = document.getElementById("modal");
+    $("#loginBtn").onclick = openLogin;
+    $("#logoutBtn").onclick = ()=>{ state.user = null; renderBase(); };
+
+    function openLogin(){
+      $("#modalTitle").textContent = "Accesso Soci";
+      $("#modalBody").innerHTML = `
+        <div style="display:grid; gap:10px">
+          <select id="userSelect" style="all:unset; background:rgba(255,255,255,.06); padding:10px; border-radius:10px">
+            <option value="">-- Scegli il socio --</option>
+            ${Object.keys(users).map(id=>`<option value="${id}">${users[id].name}</option>`).join('')}
+          </select>
+          <input id="password" type="password" placeholder="Password" style="all:unset; background:rgba(255,255,255,.06); padding:10px; border-radius:10px">
+        </div>`;
+      $("#modalOk").onclick = ()=>{
+        const id = $("#userSelect").value;
+        const pwd = $("#password").value;
+        if(!id){ alert("Seleziona un socio."); return; }
+        if(users[id]?.password !== pwd){ alert("Password non corretta."); return; }
+        state.user = { id, name: users[id].name, isAdmin: !!users[id].isAdmin };
+        modal.close();
+        renderBase();
+      };
+      modal.showModal();
+    }
+
+    // ==========
+    // MODULI + FILTRI + SEARCH
+    // ==========
+    $("#search").oninput = ()=>renderModules();
+    $$(".nav [data-filter]").forEach(b=>{
+      b.onclick = ()=>{ state.filter = b.dataset.filter; renderModules(); };
+    });
+    $("#nav").addEventListener("click",(e)=>{
+      const b = e.target.closest("button[data-view]"); if(!b) return;
+      $$("#nav button").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");
+      state.view = b.dataset.view;
+      if(state.view==="modules"){ document.querySelector('h3').scrollIntoView({behavior:"smooth"}) }
+    });
+
+    function filteredModules(){
+      const q = $("#search").value?.toLowerCase() || "";
+      return state.modules.filter(m=>{
+        const mine = state.user ? (state.progress[state.user.id]||[]) : [];
+        const done = mine.includes(m.id);
+        const byFilter = state.filter==="all" ? true : (state.filter==="done" ? done : !done);
+        const byQuery = (m.title.toLowerCase().includes(q) || (m.tag||'').toLowerCase().includes(q));
+        return byFilter && byQuery;
+      });
+    }
+
+    function updateCounters(){
+      const all = state.modules.length;
+      const done = state.user ? (state.progress[state.user.id]||[]).length : 0;
+      $("#count-all").textContent = all;
+      $("#count-done").textContent = done;
+      $("#count-pending").textContent = Math.max(0, all - done);
+    }
+
+    function renderModules(){
+      const list = filteredModules();
+      $("#moduleCount").textContent = `${list.length} moduli`;
+      const grid = $("#modulesGrid");
+      grid.innerHTML = "";
+      const mine = state.user ? (state.progress[state.user.id]||[]) : [];
+      list.forEach(m=>{
+        const isCompleted = mine.includes(m.id);
+        const el = document.createElement("div");
+        el.className = "module";
+        el.innerHTML = `
+          <header>
+            <div class="pill">${m.tag||'modulo'}</div>
+            <div style="font-weight:800; margin-left:6px">${m.title}</div>
+            <div class="pill" style="margin-left:auto; ${isCompleted?'background:rgba(58,210,159,.18); color:#b7ffe6':''}">
+              ${isCompleted?'Completato':'Da fare'}
+            </div>
+          </header>
+          <div style="color:var(--muted); font-size:13px">
+            Durata stimata: ${m.minutes||10} min • ${m.size||''}
+          </div>
+          <div class="actions">
+            <a class="btn" href="${pdfPath(m.id)}" target="_blank" rel="noopener">Apri materiale</a>
+            <button class="btn ${isCompleted?'':'primary'}" data-id="${m.id}">
+              ${isCompleted?'Segna come da fare':'Segna completato'}
+            </button>
+          </div>
+        `;
+        grid.appendChild(el);
+      });
+      grid.querySelectorAll('button[data-id]').forEach(b=>{
+        b.onclick = ()=>toggleProgress(+b.getAttribute('data-id'));
+      });
+    }
+
+    function pdfPath(id){
+      // Coerente con la tua versione: modules/Modulo {id}.pdf
+      return `modules/Modulo ${id}.pdf`;
+    }
+
+    function toggleProgress(moduleId){
+      if(!state.user){ openLogin(); return; }
+      const uid = state.user.id;
+      const arr = state.progress[uid] = state.progress[uid] || [];
+      const i = arr.indexOf(moduleId);
+      if(i>=0){ arr.splice(i,1); } else { arr.push(moduleId); }
+      saveState();
+      renderBase();
+    }
+
+    // ==========
+    // KPI + TEAM BOARD
+    // ==========
+    function renderKPI(){
+      const total = state.modules.length || 1;
+      const mine = state.user ? (state.progress[state.user.id]||[]).length : 0;
+      const myPct = Math.round(mine/total*100);
+
+      let team = 0;
+      ALLOWED.forEach(u=>{
+        const c = (state.progress[u.id]||[]).length;
+        team += (c/total);
+      });
+      const teamPct = Math.round(team / ALLOWED.length * 100);
+
+      $("#kpi-progress").textContent = myPct + "%";
+      $("#kpi-completed").textContent = `${mine}/${total}`;
+      $("#kpi-team").textContent = teamPct + "%";
+      $("#pb-personal").style.width  = myPct + "%";
+      $("#pb-completed").style.width = (mine/total*100) + "%";
+      $("#pb-team").style.width      = teamPct + "%";
+    }
+
+    function renderTeam(){
+      const board = $("#teamBoard");
+      board.classList.toggle('hidden', !$("#switchBoard").checked);
+      const grid = $("#teamGrid");
+      grid.innerHTML = "";
+      const total = state.modules.length || 1;
+      ALLOWED.forEach(u=>{
+        const done = (state.progress[u.id]||[]).length;
+        const pct  = Math.round(done/total*100);
+        const card = document.createElement("div");
+        card.className = "member";
+        card.innerHTML = `
+          <div class="name">${u.name} ${u.admin?'<span class="pill">admin</span>':''}</div>
+          <div style="color:var(--muted); font-size:13px">${u.email}</div>
+          <div class="progressbar" style="margin-top:8px"><i style="width:${pct}%"></i></div>
+          <div style="margin-top:6px">${done}/${total} completati (${pct}%)</div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // ==========
+    // ADMIN: seed / nuovo modulo
+    // ==========
+    $("#seedBtn").onclick = ()=>{
+      if(!state.user?.isAdmin) return;
+      // ricarica i moduli di default
+      state.modules = modules.slice();
+      saveState();
+      renderBase();
+    };
+    $("#newModuleBtn").onclick = ()=>{
+      if(!state.user?.isAdmin) return;
+      $("#modalTitle").textContent = "Nuovo modulo";
+      $("#modalBody").innerHTML = `
+        <div style="display:grid; gap:10px">
+          <input id="mTitle" placeholder="Titolo" style="all:unset; background:rgba(255,255,255,.06); padding:10px; border-radius:10px">
+          <input id="mTag" placeholder="Tag (es. crm, legal)" style="all:unset; background:rgba(255,255,255,.06); padding:10px; border-radius:10px">
+          <input id="mSize" placeholder="Dimensione (es. 180 KB)" style="all:unset; background:rgba(255,255,255,.06); padding:10px; border-radius:10px">
+          <input id="mMin" type="number" min="1" value="10" placeholder="Minuti" style="all:unset; background:rgba(255,255,255,.06); padding:10px; border-radius:10px">
+          <input id="mId" type="number" min="1" value="${Math.max(...state.modules.map(m=>m.id))+1}" placeholder="ID (numero)" style="all:unset; background:rgba(255,255,255,.06); padding:10px; border-radius:10px">
+        </div>`;
+      $("#modalOk").onclick = ()=>{
+        const m = {
+          id: Number($("#mId").value||Date.now()),
+          title: $("#mTitle").value || "Senza titolo",
+          description: "", size: $("#mSize").value || "", tag: ($("#mTag").value||"misc").toLowerCase(),
+          minutes: Math.max(1, Number($("#mMin").value||10)),
         };
+        state.modules.push(m);
+        saveState();
+        modal.close();
+        renderBase();
+      };
+      modal.showModal();
+    };
 
-        let currentUser = null;
+    // ==========
+    // PREFERENZE
+    // ==========
+    $("#switchBoard").onchange = ()=>renderTeam();
+    $("#switchCompact").onchange = (e)=>{ $$(".module").forEach(m=> m.style.padding = e.target.checked ? "12px":"16px"); };
 
-        function login(event) {
-            event.preventDefault();
-            
-            const userSelect = document.getElementById('userSelect');
-            const password = document.getElementById('password');
-            const selectedUser = userSelect.value;
-            
-            if (!selectedUser) {
-                alert('Seleziona un socio');
-                return;
-            }
-            
-            if (users[selectedUser] && users[selectedUser].password === password.value) {
-                currentUser = selectedUser;
-                showDashboard();
-            } else {
-                alert('Password non corretta');
-                password.value = '';
-            }
-        }
+    // ==========
+    // PDF OVERLAY (desktop)
+    // ==========
+    function openPDFOverlay(title, path){
+      // Mobile → apri nuova scheda
+      if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){ window.open(path, '_blank'); return; }
+      const overlay = document.createElement('div');
+      overlay.style.cssText = `
+        position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 9999; display:flex; flex-direction:column;
+      `;
+      overlay.innerHTML = `
+        <div style="background: white; padding: 12px 16px; display:flex; align-items:center; justify-content:space-between">
+          <strong style="color:#2b2b2b">${title}</strong>
+          <div>
+            <a href="${path}" download style="background:#667eea; color:#fff; padding:8px 12px; border-radius:8px; margin-right:8px; text-decoration:none">📥 Scarica PDF</a>
+            <button id="closePdf" style="background:#e53e3e; color:#fff; padding:8px 12px; border:none; border-radius:8px; cursor:pointer">✖ Chiudi</button>
+          </div>
+        </div>
+        <iframe src="${path}#toolbar=1&navpanes=1&scrollbar=1" style="border:none; width:100%; height: calc(100% - 54px)"></iframe>
+      `;
+      overlay.querySelector('#closePdf').onclick = ()=>document.body.removeChild(overlay);
+      document.body.appendChild(overlay);
+    }
 
-        function logout() {
-            currentUser = null;
-            document.getElementById('loginSection').classList.remove('hidden');
-            document.getElementById('dashboard').classList.add('hidden');
-            document.getElementById('userSelect').value = '';
-            document.getElementById('password').value = '';
-        }
+    // (Click su "Apri materiale"): intercetta per usare overlay desktop
+    document.addEventListener('click',(e)=>{
+      const a = e.target.closest('a.btn');
+      if(!a) return;
+      const href = a.getAttribute('href');
+      if(href && href.startsWith('modules/')){
+        e.preventDefault();
+        const card = a.closest('.module');
+        const title = card?.querySelector('header div:nth-child(2)')?.textContent || 'Modulo';
+        openPDFOverlay(title, href);
+      }
+    });
 
-        function showDashboard() {
-            document.getElementById('loginSection').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
-            document.getElementById('userName').textContent = users[currentUser].name;
-            
-            // Mostra vista admin se l'utente è amministratore
-            if (users[currentUser].isAdmin) {
-                document.getElementById('adminView').classList.remove('hidden');
-                renderAllUsersProgress();
-            } else {
-                document.getElementById('adminView').classList.add('hidden');
-            }
-            
-            renderModules();
-        }
-
-        function renderAllUsersProgress() {
-            const container = document.getElementById('allUsersProgress');
-            container.innerHTML = '';
-            
-            Object.keys(users).forEach(userId => {
-                const user = users[userId];
-                const progress = userProgress[userId] || [];
-                const progressPercentage = (progress.length / modules.length) * 100;
-                
-                const userCard = document.createElement('div');
-                userCard.className = 'user-card';
-                userCard.innerHTML = `
-                    <h3>${user.name}</h3>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${progressPercentage}%"></div>
-                    </div>
-                    <p style="color: #718096; font-size: 0.9em;">
-                        ${progress.length}/${modules.length} moduli completati (${progressPercentage.toFixed(1)}%)
-                    </p>
-                `;
-                container.appendChild(userCard);
-            });
-        }
-
-        function renderModules() {
-            const container = document.getElementById('modulesGrid');
-            container.innerHTML = '';
-            
-            const userCompletedModules = userProgress[currentUser] || [];
-            
-            modules.forEach(module => {
-                const isCompleted = userCompletedModules.includes(module.id);
-                const moduleCard = document.createElement('div');
-                
-                let statusClass, statusText, statusBadgeClass;
-                if (isCompleted) {
-                    statusClass = 'completed';
-                    statusText = 'Completato';
-                    statusBadgeClass = 'status-completed';
-                } else {
-                    statusClass = 'not-started';
-                    statusText = 'Da iniziare';
-                    statusBadgeClass = 'status-not-started';
-                }
-                
-                moduleCard.className = `module-card ${statusClass}`;
-                moduleCard.innerHTML = `
-                    <div class="module-title">${module.title}</div>
-                    <div class="module-description">${module.description}</div>
-                    <div class="module-status">
-                        <span class="status-badge ${statusBadgeClass}">${statusText}</span>
-                        <span style="color: #a0aec0; font-size: 0.8em;">${module.size}</span>
-                    </div>
-                `;
-                
-                moduleCard.addEventListener('click', () => openModule(module, isCompleted));
-                container.appendChild(moduleCard);
-            });
-        }
-
-        function openModule(module, isCompleted) {
-            // Crea il nome del file PDF basato sull'ID del modulo
-            const pdfFileName = `modules/Modulo ${module.id}.pdf`;
-            
-            if (isCompleted) {
-                // Se già completato, apri direttamente il PDF
-                openPDFViewer(module, pdfFileName);
-            } else {
-                const proceed = confirm(`Vuoi iniziare il "${module.title}"?\n\nIl PDF si aprirà in una nuova finestra.`);
-                if (proceed) {
-                    openPDFViewer(module, pdfFileName);
-                    
-                    // Dopo un breve delay, chiedi se è stato completato
-                    setTimeout(() => {
-                        const completed = confirm(`Hai completato la lettura del "${module.title}"?\n\nClicca OK per segnarlo come completato.`);
-                        if (completed) {
-                            if (!userProgress[currentUser]) {
-                                userProgress[currentUser] = [];
-                            }
-                            userProgress[currentUser].push(module.id);
-                            
-                            alert(`Complimenti! Hai completato il "${module.title}" 🎉`);
-                            
-                            // Aggiorna la vista
-                            if (users[currentUser].isAdmin) {
-                                renderAllUsersProgress();
-                            }
-                            renderModules();
-                            
-                            // In produzione qui salveresti su Firestore
-                            console.log('Progresso salvato:', userProgress);
-                        }
-                    }, 2000);
-                }
-            }
-        }
-
-        function openPDFViewer(module, pdfPath) {
-            // Controlla se è un dispositivo mobile
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            
-            if (isMobile) {
-                // Su mobile apri il PDF direttamente in una nuova scheda
-                window.open(pdfPath, '_blank');
-                return;
-            }
-            
-            // Su desktop usa il visualizzatore integrato
-            const overlay = document.createElement('div');
-            overlay.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.9);
-                z-index: 1000;
-                display: flex;
-                flex-direction: column;
-            `;
-            
-            overlay.innerHTML = `
-                <div style="background: white; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
-                    <h3 style="margin: 0; color: #4a5568;">${module.title}</h3>
-                    <div>
-                        <button onclick="downloadPDF('${pdfPath}')" style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 4px; margin-right: 10px; cursor: pointer;">
-                            📥 Scarica PDF
-                        </button>
-                        <button onclick="closePDFViewer()" style="background: #e53e3e; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
-                            ✖ Chiudi
-                        </button>
-                    </div>
-                </div>
-                <iframe src="${pdfPath}#toolbar=1&navpanes=1&scrollbar=1" 
-                        style="width: 100%; height: calc(100% - 70px); border: none;">
-                    <p>Il tuo browser non supporta i PDF integrati. 
-                       <a href="${pdfPath}" target="_blank">Clicca qui per aprire il PDF</a>
-                    </p>
-                </iframe>
-            `;
-            
-            document.body.appendChild(overlay);
-        }
-
-        function closePDFViewer() {
-            const overlay = document.querySelector('div[style*="position: fixed"]');
-            if (overlay) {
-                document.body.removeChild(overlay);
-            }
-        }
-
-        function downloadPDF(pdfPath) {
-            const link = document.createElement('a');
-            link.href = pdfPath;
-            link.download = pdfPath.split('/').pop();
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        // Inizializzazione
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('MNS Group Portal caricato correttamente');
-        });
-    </script>
+    // ==========
+    // INIT
+    // ==========
+    $("#year").textContent = new Date().getFullYear();
+    loadState();
+    // avvio senza utente (richiederà login per segnare progressi)
+    renderBase();
+  </script>
 </body>
 </html>
