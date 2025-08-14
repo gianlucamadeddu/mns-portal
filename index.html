@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MNS Group - Portale Formativo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #4a5568;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            color: #718096;
+            font-size: 1.2em;
+        }
+
+        .login-section, .dashboard {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group select:focus, .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .progress-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .user-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .user-card h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .module-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .module-card.completed {
+            border-left: 4px solid #48bb78;
+        }
+
+        .module-card.in-progress {
+            border-left: 4px solid #ed8936;
+        }
+
+        .module-card.not-started {
+            border-left: 4px solid #e2e8f0;
+        }
+
+        .module-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .module-description {
+            color: #718096;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+
+        .module-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-progress {
+            background: #feebc8;
+            color: #c05621;
+        }
+
+        .status-not-started {
+            background: #f7fafc;
+            color: #4a5568;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .user-info {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .progress-overview {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 MNS Group</h1>
+            <p class="subtitle">Portale Formativo Aziendale</p>
+        </div>
+
+        <!-- Sezione Login -->
+        <div id="loginSection" class="login-section">
+            <h2 style="text-align: center; margin-bottom: 30px; color: #4a5568;">Accesso Soci</h2>
+            <form class="login-form" onsubmit="login(event)">
+                <div class="form-group">
+                    <label for="userSelect">Seleziona il tuo nome:</label>
+                    <select id="userSelect" required>
+                        <option value="">-- Scegli il socio --</option>
+                        <option value="gianluca">Gianluca</option>
+                        <option value="simone">Simone</option>
+                        <option value="andrea">Andrea</option>
+                        <option value="nicola">Nicola</option>
+                        <option value="gabriele">Gabriele</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" placeholder="Inserisci la password" required>
+                </div>
+                <button type="submit" class="btn">Accedi al Portale</button>
+            </form>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard hidden">
+            <button class="logout-btn" onclick="logout()">Esci</button>
+            
+            <div class="user-info">
+                <h2>Benvenuto/a, <span id="userName"></span>! 👋</h2>
+                <p>Il tuo progresso formativo</p>
+            </div>
+
+            <!-- Panoramica Progressi Tutti i Soci -->
+            <div id="adminView" class="hidden">
+                <h3 style="margin-bottom: 20px; color: #4a5568;">📊 Progressi di Tutti i Soci</h3>
+                <div class="progress-overview" id="allUsersProgress">
+                    <!-- Sarà popolato dinamicamente -->
+                </div>
+            </div>
+
+            <!-- Moduli Formativi -->
+            <h3 style="margin-bottom: 20px; color: #4a5568;">📚 Moduli Formativi</h3>
+            <div class="modules-grid" id="modulesGrid">
+                <!-- Sarà popolato dinamicamente -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dati simulati (in produzione questi verranno da Firestore)
+        const users = {
+            gianluca: { name: 'Gianluca', password: 'mns2024', isAdmin: true },
+            simone: { name: 'Simone', password: 'mns2024', isAdmin: false },
+            andrea: { name: 'Andrea', password: 'mns2024', isAdmin: false },
+            nicola: { name: 'Nicola', password: 'mns2024', isAdmin: false },
+            gabriele: { name: 'Gabriele', password: 'mns2024', isAdmin: false }
+        };
+
+        const modules = [
+            {
+                id: 1,
+                title: 'Modulo 1: Introduzione Aziendale',
+                description: 'Fondamenti e valori aziendali di MNS Group',
+                size: '150 KB'
+            },
+            {
+                id: 2,
+                title: 'Modulo 2: Processi Operativi',
+                description: 'Procedure standard e best practices',
+                size: '180 KB'
+            },
+            {
+                id: 3,
+                title: 'Modulo 3: Gestione Clienti',
+                description: 'Customer relationship management',
+                size: '200 KB'
+            },
+            {
+                id: 4,
+                title: 'Modulo 4: Sicurezza e Compliance',
+                description: 'Normative e protocolli di sicurezza',
+                size: '160 KB'
+            },
+            {
+                id: 5,
+                title: 'Modulo 5: Innovazione e Sviluppo',
+                description: 'Tecnologie emergenti e strategie',
+                size: '220 KB'
+            },
+            {
+                id: 6,
+                title: 'Modulo 6: Leadership e Team Building',
+                description: 'Competenze manageriali e di gruppo',
+                size: '140 KB'
+            },
+            {
+                id: 7,
+                title: 'Modulo 7: Analisi e Reporting',
+                description: 'Strumenti di analisi e reportistica',
+                size: '190 KB'
+            }
+        ];
+
+        // Progressi simulati (in produzione da Firestore)
+        let userProgress = {
+            gianluca: [1, 2, 3, 4, 5, 6, 7], // Tutti completati
+            simone: [1, 2, 3], // Primi 3 completati
+            andrea: [1, 2, 3, 4, 5], // Primi 5 completati
+            nicola: [1, 2], // Primi 2 completati
+            gabriele: [1, 2, 3, 4] // Primi 4 completati
+        };
+
+        let currentUser = null;
+
+        function login(event) {
+            event.preventDefault();
+            
+            const userSelect = document.getElementById('userSelect');
+            const password = document.getElementById('password');
+            const selectedUser = userSelect.value;
+            
+            if (!selectedUser) {
+                alert('Seleziona un socio');
+                return;
+            }
+            
+            if (users[selectedUser] && users[selectedUser].password === password.value) {
+                currentUser = selectedUser;
+                showDashboard();
+            } else {
+                alert('Password non corretta');
+                password.value = '';
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('userSelect').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        function showDashboard() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('userName').textContent = users[currentUser].name;
+            
+            // Mostra vista admin se l'utente è amministratore
+            if (users[currentUser].isAdmin) {
+                document.getElementById('adminView').classList.remove('hidden');
+                renderAllUsersProgress();
+            } else {
+                document.getElementById('adminView').classList.add('hidden');
+            }
+            
+            renderModules();
+        }
+
+        function renderAllUsersProgress() {
+            const container = document.getElementById('allUsersProgress');
+            container.innerHTML = '';
+            
+            Object.keys(users).forEach(userId => {
+                const user = users[userId];
+                const progress = userProgress[userId] || [];
+                const progressPercentage = (progress.length / modules.length) * 100;
+                
+                const userCard = document.createElement('div');
+                userCard.className = 'user-card';
+                userCard.innerHTML = `
+                    <h3>${user.name}</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progressPercentage}%"></div>
+                    </div>
+                    <p style="color: #718096; font-size: 0.9em;">
+                        ${progress.length}/${modules.length} moduli completati (${progressPercentage.toFixed(1)}%)
+                    </p>
+                `;
+                container.appendChild(userCard);
+            });
+        }
+
+        function renderModules() {
+            const container = document.getElementById('modulesGrid');
+            container.innerHTML = '';
+            
+            const userCompletedModules = userProgress[currentUser] || [];
+            
+            modules.forEach(module => {
+                const isCompleted = userCompletedModules.includes(module.id);
+                const moduleCard = document.createElement('div');
+                
+                let statusClass, statusText, statusBadgeClass;
+                if (isCompleted) {
+                    statusClass = 'completed';
+                    statusText = 'Completato';
+                    statusBadgeClass = 'status-completed';
+                } else {
+                    statusClass = 'not-started';
+                    statusText = 'Da iniziare';
+                    statusBadgeClass = 'status-not-started';
+                }
+                
+                moduleCard.className = `module-card ${statusClass}`;
+                moduleCard.innerHTML = `
+                    <div class="module-title">${module.title}</div>
+                    <div class="module-description">${module.description}</div>
+                    <div class="module-status">
+                        <span class="status-badge ${statusBadgeClass}">${statusText}</span>
+                        <span style="color: #a0aec0; font-size: 0.8em;">${module.size}</span>
+                    </div>
+                `;
+                
+                moduleCard.addEventListener('click', () => openModule(module, isCompleted));
+                container.appendChild(moduleCard);
+            });
+        }
+
+        function openModule(module, isCompleted) {
+            // Crea il nome del file PDF basato sull'ID del modulo
+            const pdfFileName = `modules/modulo-${module.id}.pdf`;
+            
+            if (isCompleted) {
+                // Se già completato, apri direttamente il PDF
+                openPDFViewer(module, pdfFileName);
+            } else {
+                const proceed = confirm(`Vuoi iniziare il "${module.title}"?\n\nIl PDF si aprirà in una nuova finestra.`);
+                if (proceed) {
+                    openPDFViewer(module, pdfFileName);
+                    
+                    // Dopo un breve delay, chiedi se è stato completato
+                    setTimeout(() => {
+                        const completed = confirm(`Hai completato la lettura del "${module.title}"?\n\nClicca OK per segnarlo come completato.`);
+                        if (completed) {
+                            if (!userProgress[currentUser]) {
+                                userProgress[currentUser] = [];
+                            }
+                            userProgress[currentUser].push(module.id);
+                            
+                            alert(`Complimenti! Hai completato il "${module.title}" 🎉`);
+                            
+                            // Aggiorna la vista
+                            if (users[currentUser].isAdmin) {
+                                renderAllUsersProgress();
+                            }
+                            renderModules();
+                            
+                            // In produzione qui salveresti su Firestore
+                            console.log('Progresso salvato:', userProgress);
+                        }
+                    }, 2000);
+                }
+            }
+        }
+
+        function openPDFViewer(module, pdfPath) {
+            // Crea un overlay per il visualizzatore PDF
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.9);
+                z-index: 1000;
+                display: flex;
+                flex-direction: column;
+            `;
+            
+            overlay.innerHTML = `
+                <div style="background: white; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0; color: #4a5568;">${module.title}</h3>
+                    <div>
+                        <button onclick="downloadPDF('${pdfPath}')" style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 4px; margin-right: 10px; cursor: pointer;">
+                            📥 Scarica PDF
+                        </button>
+                        <button onclick="closePDFViewer()" style="background: #e53e3e; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+                            ✖ Chiudi
+                        </button>
+                    </div>
+                </div>
+                <iframe src="${pdfPath}#toolbar=1&navpanes=1&scrollbar=1" 
+                        style="width: 100%; height: calc(100% - 70px); border: none;">
+                    <p>Il tuo browser non supporta i PDF integrati. 
+                       <a href="${pdfPath}" target="_blank">Clicca qui per aprire il PDF</a>
+                    </p>
+                </iframe>
+            `;
+            
+            document.body.appendChild(overlay);
+        }
+
+        function closePDFViewer() {
+            const overlay = document.querySelector('div[style*="position: fixed"]');
+            if (overlay) {
+                document.body.removeChild(overlay);
+            }
+        }
+
+        function downloadPDF(pdfPath) {
+            const link = document.createElement('a');
+            link.href = pdfPath;
+            link.download = pdfPath.split('/').pop();
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('MNS Group Portal caricato correttamente');
+        });
+    </script>
+</body>
+</html>
