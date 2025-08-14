@@ -511,7 +511,16 @@
         }
 
         function openPDFViewer(module, pdfPath) {
-            // Crea un overlay per il visualizzatore PDF
+            // Controlla se è un dispositivo mobile
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // Su mobile apri il PDF direttamente in una nuova scheda
+                window.open(pdfPath, '_blank');
+                return;
+            }
+            
+            // Su desktop usa il visualizzatore integrato
             const overlay = document.createElement('div');
             overlay.style.cssText = `
                 position: fixed;
